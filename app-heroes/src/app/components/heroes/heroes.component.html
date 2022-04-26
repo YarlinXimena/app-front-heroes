@@ -1,0 +1,71 @@
+<main class="main-container">
+    <section class="container-form col-1">
+        <mat-card>
+            <mat-card-content>
+                <h4 *ngIf="!isUpdating" class="mb-025">Create new hero</h4>
+                <h4 *ngIf="isUpdating"  class="mb-025">Update hero</h4>
+                <label>To create a new hero please complete this form. Fields with (*) are required</label>
+                <form [formGroup]="createHeroForm" autocomplete="off">
+                    <mat-grid-list cols="2" rowHeight="2:1">
+                        <mat-grid-tile>
+                            <mat-form-field appearance="fill">
+                                <mat-label for="name">Name</mat-label>
+                                <input appInputUpperCase id="name" formControlName="name" matInput [class.is-invalid]="nameInvalid" />         
+                            </mat-form-field>
+                            <small *ngIf="nameInvalid" class="text-danger required-text">This field is required</small>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <mat-form-field appearance="fill">
+                                <mat-label for="description">Description</mat-label>
+                                <input id="description" formControlName="description" matInput>
+                            </mat-form-field>
+                            <small *ngIf="descriptionInvalid" class="text-danger required-text">This field is required</small>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </form>
+                <div class="d-flex">
+                    <button *ngIf="!isUpdating" [disabled]="createHeroForm.invalid" mat-raised-button color="primary" (click)="createHero();" class="btn-save">Save</button>
+                    <button *ngIf="isUpdating" mat-raised-button color="primary" (click)="updateHero();" class="btn-update">Update</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </section>
+    <section class="grid-search-form">
+        <form [formGroup]="searchForm" *ngIf="heroesPaginable.length > 0">
+            <mat-form-field>
+                <mat-label>Search hero by ID or NAME</mat-label>
+                <input matInput placeholder="Search" type="search" [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" />
+            </mat-form-field>
+        </form>
+    </section>
+    <section class="grid-heroes">
+        <div *ngFor="let hero of heroesPaginable | filterHero: searchValue" >
+            <mat-card class="hero-card">
+                <div class="svg-background">
+                    <img appBreakImage class="hero-profile" src="https://pixabay.com/es/vectors/deadpool-chibi-personaje-superh%c3%a9roe-5783526/" alt="">
+                </div>
+                <mat-card-content>
+                    <h4 class="hero-title">{{hero.name}}</h4>
+                    <p> <strong>{{ hero.id }}.</strong> {{ hero.description }} </p>
+                    <div class="d-flex">
+                        <button mat-button class="btn-primary" (click)="selectHeroToEdit( hero )">
+                            <i class='bx bxs-pencil' title="Edit"></i>
+                        </button>
+                        <button mat-button class="btn-danger ml-05" (click)="openConfirmationDialog( hero )" >
+                            <i class='bx bxs-trash' title="Delete"></i>
+                        </button>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </section> 
+    <section class="grid-paginator">
+        <mat-paginator [length]="pageLength" *ngIf="heroesPaginable.length > 0"
+            [pageSize]="5"
+            [pageSizeOptions]="[3, 6, 9, 12]"
+            showFirstLastButtons="true"
+            (page)="pageEvent = $event; onPaginateChange($event)"
+            aria-label="Select page">
+        </mat-paginator>
+    </section>
+</main>

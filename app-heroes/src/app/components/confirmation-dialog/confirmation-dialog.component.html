@@ -1,0 +1,13 @@
+<main class="confirmation-dialog">
+    <h4 mat-dialog-title class="dialog-title"> ¿Are you sure to want to delete this hero?</h4>
+    <div mat-dialog-content>
+        <p><strong>Id: </strong>{{ dataDialog.id }}</p>
+        <p><strong>Name: </strong>{{ dataDialog.name }}</p>
+        <p><strong>Description: </strong>{{ dataDialog.description }}</p>
+        <div class="d-flex p-05">
+            <button mat-raised-button (click)="closeDialog()">No</button>
+            <button mat-raised-button class="btn-primary ml-05" (click)="deleteHero( dataDialog.id )">Yes</button>
+        </div>
+    </div>
+</main>
+
